@@ -101,21 +101,28 @@ namespace iText.Samples.Sandbox.Events
 
             //table3
             Table table3 = new Table(UnitValue.CreatePercentArray(4)).UseAllAvailableWidth();
-            List<Items> itemList = new List<Items>();
             
-            var itemName = new Items().ItemName;
-            var itemDecription = new Items().ItemDescription;
-            var itemQuantity = new Items().ItemQuantity;
-            var itemPrice = new Items().ItemPrice;
-            var itemAmount  = itemQuantity * itemPrice;
+            List<Items> itemList = new List<Items>();
+            itemList.Add(new Items
+            {
+                 ItemName = "", 
+                 ItemDescription="",
+                 ItemQuantity= 0,
+                 ItemPrice= 0
+
+            });
+            
+           // var itemAmount  = itemQuantity * itemPrice;
 
             // table3.AddCell(Ecell14);
-            for (int i=0; i<itemList.Count;i++ ){
+            for (int i=0; i<itemList.Count;i++ )
+            {
+                var  itemAmount = itemList[i].ItemQuantity * itemList[i].ItemPrice;
                 Cell Ecell11 = new Cell().SetTextAlignment(TextAlignment.LEFT).SetBorder(Border.NO_BORDER).SetPaddingLeft(15)
-                                      .Add(new Paragraph(itemName))
-                                      .Add(new Paragraph(itemDecription));
-                Cell Ecell12 = new Cell().SetTextAlignment(TextAlignment.RIGHT).Add(new Paragraph(itemQuantity.ToString())).SetBorder(Border.NO_BORDER).SetPaddingLeft(7);
-                Cell Ecell13 = new Cell().SetTextAlignment(TextAlignment.RIGHT).Add(new Paragraph(itemPrice.ToString())).SetBorder(Border.NO_BORDER);
+                                      .Add(new Paragraph(itemList[i].ItemName))
+                                      .Add(new Paragraph(itemList[i].ItemDescription));
+                Cell Ecell12 = new Cell().SetTextAlignment(TextAlignment.RIGHT).Add(new Paragraph(itemList[i].ItemQuantity.ToString())).SetBorder(Border.NO_BORDER).SetPaddingLeft(7);
+                Cell Ecell13 = new Cell().SetTextAlignment(TextAlignment.RIGHT).Add(new Paragraph(itemList[i].ToString())).SetBorder(Border.NO_BORDER);
                 Cell Ecell14 = new Cell().SetTextAlignment(TextAlignment.RIGHT).Add(new Paragraph(itemAmount.ToString())).SetBorder(Border.NO_BORDER).SetPaddingRight(15);
                 table3.AddCell(Ecell11);
                 table3.AddCell(Ecell12);
@@ -147,7 +154,7 @@ namespace iText.Samples.Sandbox.Events
             //decimal[] priceTotal = [];
             //for(int i=0; i < itemList.Count; i++)
             //{
-            //    priceTotal = itemAmount[i - 1] + itemAmount[i];
+            //    priceTotal = itemAmount[i] + itemAmount[i+0];
             //}
             Cell Fcell10 = new Cell().SetBorder(Border.NO_BORDER);
             Cell Fcell01 = new Cell().SetBorder(Border.NO_BORDER);
