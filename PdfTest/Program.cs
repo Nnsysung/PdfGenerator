@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using iText.IO.Font;
 using iText.IO.Font.Constants;
@@ -16,7 +17,7 @@ using iText.Layout.Element;
 using iText.Layout.Layout;
 using iText.Layout.Properties;
 using iText.Layout.Renderer;
-
+using PdfTest.Entities;
 namespace iText.Samples.Sandbox.Events
 {
     class Utility
@@ -61,18 +62,26 @@ namespace iText.Samples.Sandbox.Events
 
             //table1
             Table table1 = new Table(UnitValue.CreatePercentArray(3)).UseAllAvailableWidth();
+            var customerName = new Customer ().CustomerName;
+            var customerAddress = new Customer().CustomerAddress;
+            var customerMail = new Customer().CustomerMail;
+
+            var purchaseOrderNumber = new Invoice().PurchaseOrderNumber;
+            var invoiceNumber = new Invoice().InvoiceNumber;
+            var invoiceDate = new Invoice().InvoiceDate;
+            var invoiceDueDate = new Invoice().InvoiceDueDate;
 
             Cell Cell_ = new Cell(1, 2).SetBorder(Border.NO_BORDER).SetPadding(10f)
              .Add(new Paragraph("BILL TO\n").SetTextAlignment(TextAlignment.LEFT).SetFontColor(WebColors.GetRGBColor("grey")))
-             .Add(new Paragraph("gj\n").SetTextAlignment(TextAlignment.LEFT))
-             .Add(new Paragraph("gj gj\n").SetTextAlignment(TextAlignment.LEFT))
-             .Add(new Paragraph("blablabla@gmail\n").SetTextAlignment(TextAlignment.LEFT).SetMargin(3f));
+             .Add(new Paragraph(customerName).SetTextAlignment(TextAlignment.LEFT))
+             .Add(new Paragraph(customerAddress).SetTextAlignment(TextAlignment.LEFT))
+             .Add(new Paragraph(customerMail).SetTextAlignment(TextAlignment.LEFT).SetMargin(3f));
             table1.AddCell(Cell_);
             Cell ACell = new Cell().SetBorder(Border.NO_BORDER)
-             .Add(new Paragraph("Invoice Number: 1\n").SetTextAlignment(TextAlignment.LEFT).SetFontColor(WebColors.GetRGBColor("grey")).SetMargin(2f))
-             .Add(new Paragraph("Invoice Date:\n").SetTextAlignment(TextAlignment.LEFT).SetMargin(2f).SetPadding(2f))
-             .Add(new Paragraph("Payment Due:\n").SetTextAlignment(TextAlignment.LEFT).SetMargin(2f).SetPadding(2f))
-             .Add(new Paragraph("AmountDue:\n").SetTextAlignment(TextAlignment.LEFT).SetBackgroundColor(new DeviceRgb(245, 245, 245)).SetMarginRight(15).SetPadding(5));
+             .Add(new Paragraph(purchaseOrderNumber.ToString()).SetTextAlignment(TextAlignment.LEFT).SetFontColor(WebColors.GetRGBColor("grey")).SetMargin(2f))
+             .Add(new Paragraph(invoiceNumber.ToString()).SetTextAlignment(TextAlignment.LEFT).SetMargin(2f).SetPadding(2f))
+             .Add(new Paragraph(invoiceDate.ToString()).SetTextAlignment(TextAlignment.LEFT).SetMargin(2f).SetPadding(2f))
+             .Add(new Paragraph(invoiceDueDate.ToString()).SetTextAlignment(TextAlignment.LEFT).SetBackgroundColor(new DeviceRgb(245, 245, 245)).SetMarginRight(15).SetPadding(5));
             table1.AddCell(ACell);
             Paragraph newline2 = new Paragraph(new Text("\n"));
 
@@ -92,19 +101,34 @@ namespace iText.Samples.Sandbox.Events
 
             //table3
             Table table3 = new Table(UnitValue.CreatePercentArray(4)).UseAllAvailableWidth();
-            Cell Ecell11 = new Cell().SetTextAlignment(TextAlignment.LEFT).SetBorder(Border.NO_BORDER).SetPaddingLeft(15)
-                                     .Add(new Paragraph("bjbvv"))
-                                     .Add(new Paragraph("rgar"));
-            Cell Ecell12 = new Cell().SetTextAlignment(TextAlignment.RIGHT).Add(new Paragraph("1")).SetBorder(Border.NO_BORDER).SetPaddingLeft(7);
-            Cell Ecell13 = new Cell().SetTextAlignment(TextAlignment.RIGHT).Add(new Paragraph("NGN20,000.00")).SetBorder(Border.NO_BORDER);
-            Cell Ecell14 = new Cell().SetTextAlignment(TextAlignment.RIGHT).Add(new Paragraph("NGN20,000.00")).SetBorder(Border.NO_BORDER).SetPaddingRight(15);
+            List<Items> itemList = new List<Items>();
+            
+            var itemName = new Items().ItemName;
+            var itemDecription = new Items().ItemDescription;
+            var itemQuantity = new Items().ItemQuantity;
+            var itemPrice = new Items().ItemPrice;
+            var itemAmount  = itemQuantity * itemPrice;
+
+            // table3.AddCell(Ecell14);
+            for (int i=0; i<itemList.Count;i++ ){
+                Cell Ecell11 = new Cell().SetTextAlignment(TextAlignment.LEFT).SetBorder(Border.NO_BORDER).SetPaddingLeft(15)
+                                      .Add(new Paragraph(itemName))
+                                      .Add(new Paragraph(itemDecription));
+                Cell Ecell12 = new Cell().SetTextAlignment(TextAlignment.RIGHT).Add(new Paragraph(itemQuantity.ToString())).SetBorder(Border.NO_BORDER).SetPaddingLeft(7);
+                Cell Ecell13 = new Cell().SetTextAlignment(TextAlignment.RIGHT).Add(new Paragraph(itemPrice.ToString())).SetBorder(Border.NO_BORDER);
+                Cell Ecell14 = new Cell().SetTextAlignment(TextAlignment.RIGHT).Add(new Paragraph(itemAmount.ToString())).SetBorder(Border.NO_BORDER).SetPaddingRight(15);
+                table3.AddCell(Ecell11);
+                table3.AddCell(Ecell12);
+                table3.AddCell(Ecell13);
+                table3.AddCell(Ecell14);
+
+            }
+            
+            
 
 
-            table3.AddCell(Ecell11);
-            table3.AddCell(Ecell12);
-            table3.AddCell(Ecell13);
-            table3.AddCell(Ecell14);
-
+           
+            
             Paragraph newline3 = new Paragraph(new Text("\n"));
 
             // LineSeparator lineSeparator2 = new LineSeparator(new SolidLine(1f)).SetMargin(0);
@@ -117,11 +141,19 @@ namespace iText.Samples.Sandbox.Events
 
             //table4
             Table table4 = new Table(UnitValue.CreatePercentArray(4)).UseAllAvailableWidth();
+            var taxAbbr = new Taxes().TaxAbbreviation;
+            var taxRate = new Taxes().Rate;
+            var taxShown = taxAbbr + taxRate;
+            //decimal[] priceTotal = [];
+            //for(int i=0; i < itemList.Count; i++)
+            //{
+            //    priceTotal = itemAmount[i - 1] + itemAmount[i];
+            //}
             Cell Fcell10 = new Cell().SetBorder(Border.NO_BORDER);
             Cell Fcell01 = new Cell().SetBorder(Border.NO_BORDER);
             Cell Fcell11 = new Cell().SetTextAlignment(TextAlignment.RIGHT).SetBorder(Border.NO_BORDER)
                                   .Add(new Paragraph("SubTotal"))
-                                  .Add(new Paragraph("VAT 7.5%:"));
+                                  .Add(new Paragraph(taxShown));
             Cell Fcell12 = new Cell().SetTextAlignment(TextAlignment.RIGHT).SetBorder(Border.NO_BORDER).SetPaddingRight(15)
                              .Add(new Paragraph("NGN20,000.00"))
                              .Add(new Paragraph("NGN20,000.00"));
